@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-access="field" default-cascade="all">
+    <class name="com.goldenconsultingci.erp.identityaccess.domain.model.identity.Direction" table="tbl_iam_direction" lazy="true">
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native"/>
+        </id>
+        <property name="name" column="name" type="java.lang.String"/>
+        <set name="departments" cascade="all, delete-orphan" inverse="false" lazy="true">
+            <key column="direction_id" not-null="true" />
+            <one-to-many class="com.goldenconsultingci.erp.identityaccess.domain.model.identity.Department"/>
+        </set>
+    </class>
+</hibernate-mapping>

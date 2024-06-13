@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:tx="http://www.springframework.org/schema/tx"
+        xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+		https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		https://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx
+		https://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/aop
+		https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+<!--    <tx:annotation-driven transaction-manager="transactionManager"/>-->
+
+<!--    <bean id="iamDatasource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">-->
+<!--        <property name="driverClass" value="com.mysql.cj.jdbc.Driver"/>-->
+<!--        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/erp_iam"/>-->
+<!--        <property name="user" value="root"/>-->
+<!--        <property name="password" value="U2kgRElFVSBlc3QgcG91ciBub3VzIH@!!"/>-->
+<!--        <property name="minPoolSize" value="3"/>-->
+<!--        <property name="maxPoolSize" value="20"/>-->
+<!--        <property name="acquireIncrement" value="5"/>-->
+<!--        <property name="idleConnectionTestPeriod" value="3000"/>-->
+<!--        <property name="maxStatements" value="50"/>-->
+<!--        <property name="checkoutTimeout" value="10000"/>-->
+<!--    </bean>-->
+<!--    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">-->
+<!--        <property name="dataSource" ref="iamDatasource"/>-->
+<!--        <property name="configLocation">-->
+<!--            <value>classpath:hibernate.cfg.xml</value>-->
+<!--        </property>-->
+<!--    </bean>-->
+<!--    <bean id="txManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">-->
+<!--        <property name="sessionFactory">-->
+<!--            <ref bean="sessionFactory"/>-->
+<!--        </property>-->
+<!--    </bean>-->
+<!--    <bean id="abstractTransactionalServiceProxy" abstract="true" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">-->
+<!--        <property name="transactionManager">-->
+<!--            <ref bean="txManager"/>-->
+<!--        </property>-->
+<!--        <property name="transactionAttributes">-->
+<!--            <props>-->
+<!--                <prop key="*">PROPAGATION_REQUIRED</prop>-->
+<!--            </props>-->
+<!--        </property>-->
+<!--    </bean>-->
+
+    <bean id="siteRepository" class="com.goldenconsultingci.erp.identityaccess.infrastructure.persistence.HibernateSiteRepository" autowire="byName"/>
+    <bean id="directionRepository" class="com.goldenconsultingci.erp.identityaccess.infrastructure.persistence.HibernateDirectionRepository" autowire="byName"/>
+    <bean id="roleRepository" class="com.goldenconsultingci.erp.identityaccess.infrastructure.persistence.HibernateRoleRepository" autowire="byName"/>
+    <bean id="societyRepository" class="com.goldenconsultingci.erp.identityaccess.infrastructure.persistence.HibernateSocietyRepository" autowire="byName"/>
+    <bean id="societyProvisionService" class="com.goldenconsultingci.erp.identityaccess.domain.model.identity.SocietyProvisionService" >
+       <constructor-arg ref="societyRepository"/>
+       <constructor-arg ref="roleRepository"/>
+    </bean>
+    <bean id="siteProvisionService" class="com.goldenconsultingci.erp.identityaccess.domain.model.identity.SiteProvisionService" >
+        <constructor-arg ref="societyRepository"/>
+        <constructor-arg ref="siteRepository"/>
+    </bean>
+    <bean id="userRepository" class="com.goldenconsultingci.erp.identityaccess.infrastructure.persistence.HibernateUserRepository" autowire="byName"/>
+    <bean id="userRegistrationService" class="com.goldenconsultingci.erp.identityaccess.domain.model.identity.UserRegistrationService">
+        <constructor-arg ref="userRepository"/>
+    </bean>
+    <bean name="domainRegistry" class="com.goldenconsultingci.erp.identityaccess.domain.DomainRegistry" autowire="byName"/>
+    <bean name="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+    <bean name="passwordService" class="com.goldenconsultingci.erp.identityaccess.domain.model.identity.PasswordService"/>
+</beans>

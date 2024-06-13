@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-access="field" default-cascade="all">
+    <class name="com.goldenconsultingci.erp.identityaccess.domain.model.identity.User" table="tbl_iam_user" lazy="true">
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native"/>
+        </id>
+        <version column="concurrency_version" name="concurrencyVersion" type="int" />
+        <property name="password" column="password" type="java.lang.String" />
+        <one-to-one name="actor" class="com.goldenconsultingci.erp.identityaccess.domain.model.identity.Actor" cascade="all" lazy="false" />
+        <property name="username" column="username" type="java.lang.String" />
+        <property name="active" column="active" type="boolean"/>
+    </class>
+</hibernate-mapping>

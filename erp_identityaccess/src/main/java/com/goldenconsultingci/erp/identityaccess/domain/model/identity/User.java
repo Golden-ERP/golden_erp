@@ -1,0 +1,123 @@
+package com.goldenconsultingci.erp.identityaccess.domain.model.identity;
+
+import com.goldenconsultingci.erp.common.domain.ConcurrencySafeEntity;
+import com.goldenconsultingci.erp.identityaccess.domain.DomainRegistry;
+
+public class User extends ConcurrencySafeEntity {
+
+    private String username;
+    private String password;
+    private Actor actor;
+    private boolean active;
+    protected User() {
+        super();
+    }
+
+    public User(String anUsername, String aPassword, Actor anActor) {
+        this();
+        this.setUsername(anUsername);
+        this.protectPassword("", aPassword);
+        this.setActor(anActor);
+    }
+
+    private void setActor(Actor anActor) {
+        this.assertArgumentNotNull(anActor, "L'acteur ne doit pas être nul.");
+        this.actor = anActor;
+    }
+
+    private void protectPassword(String aCurrentPassword, String aChangedPassword) {
+        this.assertPasswordNotSame(aCurrentPassword, aChangedPassword);
+        this.assertPasswordNotWeak(aChangedPassword);
+        this.assertUsernamePasswordNotSame(aChangedPassword);
+        this.setPassword(DomainRegistry.passwordEncoder().encode(aChangedPassword));
+    }
+
+    private void assertPasswordNotWeak(String aChangedPassword) {
+        this.assertArgumentTrue(
+                DomainRegistry.passwordService()
+                        .isWeak(aChangedPassword),
+                "Le mot doit être fort.");
+    }
+
+    private void assertUsernamePasswordNotSame(String aChangedPassword) {
+        this.assertArgumentNotEquals(
+                this.username(),
+                aChangedPassword,
+                "Le nom d'utilisateur et le mot de passe ne doivent pas être même.");
+    }
+
+    private void assertPasswordNotSame(String aCurrentPassword, String aChangedPassword) {
+        this.assertArgumentNotEquals(
+                aCurrentPassword,
+                aChangedPassword,
+                "Le mot de passe n'est pas changé.");
+    }
+
+    private void setUsername(String anUsername) {
+        this.assertArgumentNotEmpty(anUsername, "Le nom d'utilisateur est réquis.");
+        this.assertArgumentLength(anUsername, 1, 20, "Le nom d'utilisateur doit comporter 20 caractères ou moins.");
+        this.username = anUsername;
+    }
+
+    private void setPassword(String password) {
+        this.password = password;
+    }
+
+    private void setActive(boolean anActive) {
+        this.active = anActive;
+    }
+
+    public void changePassword(String aCurrentPassword, String aChangedPassword) {
+        this.assertArgumentNotEmpty(aCurrentPassword, "L'ancien et le nouveau mot de passe doivent pas être vide.");
+        this.assertPasswordConfirmed(aCurrentPassword);
+        this.protectPassword(aCurrentPassword, aChangedPassword);
+    }
+
+    private void assertPasswordConfirmed(String aCurrentPassword) {
+        this.assertArgumentTrue(
+                DomainRegistry.passwordEncoder()
+                        .matches(aCurrentPassword, this.password()),
+                "Le mot de passe est incorrecte.");
+    }
+
+    public String username() {
+        return username;
+    }
+
+    public String password() {
+        return password;
+    }
+
+
+    public boolean isActive() {
+        return this.active;
+    }
+
+    public void activate() {
+        if (!this.isActive()) {
+            this.active =  true;
+        }
+    }
+
+    public Actor actor() {
+        return actor;
+    }
+
+    public Telephone telephone() {
+        return this.actor().contactInformation().primaryTelephone();
+    }
+
+    public EmailAddress emailAddress() {
+        return this.actor().contactInformation().emailAddress();
+    }
+
+    public FullName name() {
+        return this.actor().name();
+    }
+
+    public void deactivate() {
+        if (this.isActive()) {
+            this.active = false;
+        }
+    }
+}

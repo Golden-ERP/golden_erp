@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-access="field" default-cascade="all">
+    <class name="com.goldenconsultingci.erp.identityaccess.domain.model.identity.Site" table="tbl_iam_site" lazy="true">
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native"/>
+        </id>
+        <property name="siteId" column="site_id" type="string" unique="true"/>
+        <property name="name" column="name" type="java.lang.String" unique="true" />
+        <property name="type" type="com.goldenconsultingci.erp.identityaccess.domain.model.identity.SiteType"/>
+        <component name="geographicalAddress" class="com.goldenconsultingci.erp.identityaccess.domain.model.identity.GeographicalAddress">
+            <property name="street" column="geographical_address_street" type="java.lang.String"/>
+            <property name="city" column="geographical_address_city" type="java.lang.String"/>
+            <property name="country" column="geographical_address_country" type="java.lang.String"/>
+        </component>
+        <component name="manager" class="com.goldenconsultingci.erp.identityaccess.domain.model.identity.Manager">
+            <component name="name" class="com.goldenconsultingci.erp.identityaccess.domain.model.identity.FullName">
+                <property name="firstName" column="manager_first_name" type="string"/>
+                <property name="lastName" column="manager_last_name" type="string"/>
+            </component>
+            <component name="telephone" class="com.goldenconsultingci.erp.identityaccess.domain.model.identity.Telephone">
+                <property name="number" column="telephone_address" type="string"/>
+            </component>
+            <component name="emailAddress" class="com.goldenconsultingci.erp.identityaccess.domain.model.identity.EmailAddress">
+                <property name="address" column="email_address" type="string"/>
+            </component>
+        </component>
+
+        <set name="directions" cascade="all,delete-orphan" inverse="false" lazy="true">
+            <key column="site_id" not-null="true"/>
+            <one-to-many class="com.goldenconsultingci.erp.identityaccess.domain.model.identity.Direction"/>
+        </set>
+    </class>
+</hibernate-mapping>

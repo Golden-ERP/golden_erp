@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-access="field" default-cascade="all">
+    <class name="com.goldenconsultingci.erp.identityaccess.domain.model.identity.Society" table="tbl_iam_society" lazy="true">
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native"/>
+        </id>
+        <property name="name" column="name" type="java.lang.String"/>
+        <property name="sigle" column="sigle" type="java.lang.String"/>
+        <property name="rccm" column="rccm" type="java.lang.String"/>
+        <component name="contactInformation" class="com.goldenconsultingci.erp.identityaccess.domain.model.identity.ContactInformation">
+            <component name="primaryTelephone" class="com.goldenconsultingci.erp.identityaccess.domain.model.identity.Telephone">
+                <property name="number" column="contact_information_primary_telephone" type="java.lang.String" />
+            </component>
+            <component name="secondaryTelephone" class="com.goldenconsultingci.erp.identityaccess.domain.model.identity.Telephone">
+                <property name="number" column="contact_information_secondary_telephone" type="java.lang.String" />
+            </component>
+            <component name="emailAddress" class="com.goldenconsultingci.erp.identityaccess.domain.model.identity.EmailAddress">
+                <property name="address" column="email_address" type="java.lang.String" />
+            </component>
+        </component>
+        <property name="numberOfRepresentations" column="number_of_representations" type="java.lang.Integer"/>
+        <property name="activityArea" column="activity_area" type="java.lang.String"/>
+        <property name="taxSystem" column="tax_system" type="com.goldenconsultingci.erp.identityaccess.domain.model.identity.TaxSystem"/>
+    </class>
+</hibernate-mapping>
