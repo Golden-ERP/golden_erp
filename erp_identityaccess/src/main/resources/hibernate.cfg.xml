@@ -10,7 +10,7 @@
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <!-- C3P0 settings -->
-        <property name="hibernate.c3p0.min_size">5</property>
+        <property name="hibernate.c3p0.min_size">3</property>
         <property name="hibernate.c3p0.max_size">20</property>
         <property name="hibernate.c3p0.timeout">300</property>
         <property name="hibernate.c3p0.max_statements">50</property>
@@ -20,7 +20,7 @@
         <!-- Other Hibernate properties -->
 <!--        <property name="hibernate.show_sql">true</property>-->
         <property name="hibernate.format_sql">true</property>
-        <property name="hibernate.hbm2ddl.auto">create</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
 <!--        <property name="hibernate.current_session_context_class">thread</property>-->
 
 <!--        <property name="hibernate.transform_hbm_xml.enabled">true</property>-->
@@ -31,5 +31,6 @@
         <mapping resource="Society.hbm.xml"/>
         <mapping resource="Role.hbm.xml"/>
         <mapping resource="Site.hbm.xml"/>
+        <mapping resource="Setting.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

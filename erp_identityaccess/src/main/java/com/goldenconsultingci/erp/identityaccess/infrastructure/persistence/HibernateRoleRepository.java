@@ -25,6 +25,13 @@ public class HibernateRoleRepository
 
     @Override
     public void remove(Role aRole) {
+    }
+
+    @Override
+    public Role roleNamed(String aRoleName) {
+        return this.session().createQuery("select r from r Role where r.name = :name", Role.class)
+                .setParameter("name", aRoleName)
+                .uniqueResult();
 
     }
 }

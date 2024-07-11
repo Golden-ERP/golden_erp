@@ -1,8 +1,10 @@
 package com.goldenconsultingci.erp.identityaccess.domain.model.access;
 
+import com.goldenconsultingci.erp.common.domain.ConcurrencySafeEntity;
 import com.goldenconsultingci.erp.common.domain.Entity;
+import com.goldenconsultingci.erp.identityaccess.domain.model.identity.Department;
 
-public class Role extends Entity {
+public class Role extends ConcurrencySafeEntity {
     private String name;
     private String description;
 

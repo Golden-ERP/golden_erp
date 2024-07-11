@@ -2,6 +2,10 @@ package com.goldenconsultingci.erp.identityaccess.domain.model.identity;
 
 import com.goldenconsultingci.erp.common.domain.ConcurrencySafeEntity;
 import com.goldenconsultingci.erp.identityaccess.domain.DomainRegistry;
+import com.goldenconsultingci.erp.identityaccess.domain.model.access.Role;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class User extends ConcurrencySafeEntity {
 
@@ -9,6 +13,7 @@ public class User extends ConcurrencySafeEntity {
     private String password;
     private Actor actor;
     private boolean active;
+    private Role role;
     protected User() {
         super();
     }
@@ -119,5 +124,33 @@ public class User extends ConcurrencySafeEntity {
         if (this.isActive()) {
             this.active = false;
         }
+    }
+
+    public UserDescriptor descriptor() {
+        return new UserDescriptor(
+                this.username(),
+                this.name().firstName(),
+                this.name().lastName(),
+                 this.emailAddress().address(),
+                this.actor().site().siteId());
+    }
+
+    public boolean hasRole(Role role) {;
+        return true;
+    }
+
+    public void assignToRole(Role role) {
+        this.role = role;
+    }
+
+    public Site site() {
+        return this.actor().site();
+    }
+
+    public boolean isInSite(String aSiteId) {
+        if (this.site() != null) {
+            return this.site().siteId().equals(aSiteId);
+        }
+        return false;
     }
 }

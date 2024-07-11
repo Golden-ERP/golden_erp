@@ -27,5 +27,6 @@
         <property name="gender" column="gender" type="com.goldenconsultingci.erp.identityaccess.domain.model.identity.Gender"/>
         <property name="occupation" column="occupation" type="java.lang.String"/>
         <one-to-one name="user"  class="com.goldenconsultingci.erp.identityaccess.domain.model.identity.User" cascade="all" lazy="false" constrained="true"/>
+        <many-to-one name="site" class="com.goldenconsultingci.erp.identityaccess.domain.model.identity.Site" column="site_id" />
     </class>
 </hibernate-mapping>

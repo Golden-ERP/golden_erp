@@ -1,17 +1,20 @@
 package com.goldenconsultingci.erp.identityaccess.application;
 
+import com.goldenconsultingci.erp.common.domain.TaxSystem;
 import com.goldenconsultingci.erp.identityaccess.application.command.CreateSiteCommand;
 import com.goldenconsultingci.erp.identityaccess.application.command.ProvisionTenantCommand;
 import com.goldenconsultingci.erp.identityaccess.application.command.RegisterUserCommand;
 import com.goldenconsultingci.erp.identityaccess.domain.model.access.RoleRepository;
 import com.goldenconsultingci.erp.identityaccess.domain.model.identity.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.function.Function;
 
-@Transactional
+@Transactional("transactionManager")
 public class IdentityApplicationService {
 
     @Autowired
@@ -27,16 +30,16 @@ public class IdentityApplicationService {
     @Autowired
     private DirectionRepository directionRepository;
     @Autowired
-    private UserRegistrationService userRegistrationService;
-    @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private AuthenticationService authenticationService;
 
     /**
      * provisionSociety - Provision les information d'une société
      * @param aCommand
      * @return {@link Society}
      */
-    @Transactional
+    @IamTx
     public Society provisionSociety(ProvisionTenantCommand aCommand) {
         Society society = this.societyProvisionService.provisionTenant(
                 aCommand.name(),
@@ -65,7 +68,7 @@ public class IdentityApplicationService {
      * @param aCommand
      * @return {@link Site}
      */
-    @Transactional
+    @IamTx
     public Site createSite(CreateSiteCommand aCommand) {
         return this.siteProvisionService
                 .provisionSite(
@@ -100,7 +103,7 @@ public class IdentityApplicationService {
         return this.siteRepository.ofId(anIdentity);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(value ="iam" ,readOnly = true)
     public List<Site> listSites() {
         return this.siteRepository.findAll();
     }
@@ -112,9 +115,9 @@ public class IdentityApplicationService {
      * @return {@link User}
      */
 
-    @Transactional
+    @IamTx
     public User registerUser(RegisterUserCommand aCommand) {
-        User user = this.userRegistrationService.registerUser(
+        User user = UserFactory.registerUser(
                 aCommand.username(),
                 aCommand.password(),
                 new FullName(aCommand.firstName(), aCommand.lastName()),
@@ -123,10 +126,11 @@ public class IdentityApplicationService {
                 Gender.valueOf(aCommand.gender()),
                 aCommand.occupation());
 
+        userRepository.add(user);
         return user;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(value = "iam", readOnly = true)
     public Collection<User> listAllUsers() {
         return this.userRepository.allUsers();
     }
@@ -137,7 +141,7 @@ public class IdentityApplicationService {
      * @param aSiteId
      * @return {@link Direction}
      */
-    @Transactional
+    @IamTx
     public Direction addDirection(String aDirectionName, String aSiteId) {
         Site site = this.existingSite(aSiteId);
         Direction direction = new Direction(aDirectionName);
@@ -149,7 +153,7 @@ public class IdentityApplicationService {
      * listAllDirections - retourne la liste des directions.
      * @return liste {@link Direction}
      */
-    @Transactional(readOnly = true)
+    @Transactional(value = "iam", readOnly = true)
     public Set<Direction> listDirectionsOfSite(String aSiteId) {
         Site site = this.siteRepository.ofId(aSiteId);
         if (site != null) {
@@ -168,8 +172,7 @@ public class IdentityApplicationService {
     }
 
 
-
-    @Transactional
+    @IamTx
     public Department createDepartment(String aDepartmentName, String aDirectionName) {
         Direction direction =this.findDirection(aDirectionName);
         Department department = new Department(aDepartmentName);
@@ -177,7 +180,7 @@ public class IdentityApplicationService {
         return department;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(value = "iam",readOnly = true)
     public Set<Department> departmentsOfDirection(String aDirectionName) {
         Direction direction = this.findDirection(aDirectionName);
         if (direction != null) {
@@ -207,5 +210,39 @@ public class IdentityApplicationService {
         return site;
     }
 
+    public String authenticate(String anUsername, String aPassword) {
+        return this.authenticationService.authenticate(anUsername, aPassword);
+    }
+
+    @IamTx
+    public void affectActorInSite(String anUsername, String aSiteId) {
+        Site site = this.existingSite(aSiteId);
+        this.nonNulUser(anUsername).actor().changeSite(site);
+    }
+
+    public User findUser(String anUsername) {
+        return this.userRepository.userWithUsername(anUsername);
+    }
+
+    public User userInSite(String anUsername, String aSiteId) {
+        User userInSite = null;
+        User user = this.findUser(anUsername);
+        if (user != null) {
+            if (user.isInSite(aSiteId)) {
+                userInSite = user;
+            }
+        }
+
+        return userInSite;
+    }
+
+    private User nonNulUser(String anUsername) {
+        User user = this.findUser(anUsername);
+        if (user == null) {
+            throw new IllegalArgumentException("Utiliteur " + anUsername + " n'existe pas");
+        }
+
+        return user;
+    }
 
 }

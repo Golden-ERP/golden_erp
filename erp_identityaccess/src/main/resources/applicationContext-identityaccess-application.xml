@@ -14,8 +14,8 @@
         http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <aop:aspectj-autoproxy />
-    <context:annotation-config/>
+    <context:annotation-config />
     <bean id="identityApplicationService" class="com.goldenconsultingci.erp.identityaccess.application.IdentityApplicationService" autowire="byName"/>
-
+    <bean id="settingApplicationService" class="com.goldenconsultingci.erp.identityaccess.application.SettingApplicationService" autowire="byName"/>
     <bean id="applicationRegistryService" class="com.goldenconsultingci.erp.identityaccess.application.ApplicationServiceRegistry" autowire="byName"/>
 </beans>

@@ -26,43 +26,33 @@
     <aop:aspectj-autoproxy/>
 
     <context:annotation-config />
+    <context:property-placeholder location="classpath:/WEB-INF/classes/golden/extension/golden_erp-global.properties"/>
 
-    <tx:annotation-driven  transaction-manager="transactionManager"/>
+<!--    <tx:annotation-driven  transaction-manager="transactionManager"/>-->
 
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
-        <property name="dataSource" ref="iamDatasource"/>
-        <property name="configLocation">
-            <value>classpath:hibernate.cfg.xml</value>
-        </property>
-    </bean>
-
-    <bean id="sessionProvider" class="com.goldenconsultingci.erp.common.spring.hibernate.SpringHibernateSessionProvider">
-        <property name="sessionFactory">
-            <ref bean="sessionFactory"/>
-        </property>
-    </bean>
-
-    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-
-<!--    <bean id="abstractTransactionalServiceProxy" abstract="true" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">-->
-<!--        <property name="transactionManager">-->
-<!--            <ref bean="transactionManager"/>-->
-<!--        </property>-->
-<!--        <property name="transactionAttributes">-->
+<!--    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">-->
+<!--        <property name="dataSource" ref="dataSource"/>-->
+<!--        <property name="hibernateProperties">-->
 <!--            <props>-->
-<!--                <prop key="*">PROPAGATION_REQUIRED</prop>-->
+<!--                &lt;!&ndash; your hibernate properties &ndash;&gt;-->
 <!--            </props>-->
 <!--        </property>-->
 <!--    </bean>-->
-    <bean id="iamDatasource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
-        <property name="driverClass" value="com.mysql.cj.jdbc.Driver"/>
-        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/erp_iam"/>
-        <property name="user" value="root"/>
-        <property name="password" value="U2kgRElFVSBlc3QgcG91ciBub3VzIH@!!"/>
-        <property name="minPoolSize" value="3"/>
-        <property name="maxPoolSize" value="20"/>
+
+<!--    <bean id="sessionProvider" class="com.goldenconsultingci.erp.common.spring.hibernate.SpringHibernateSessionProvider">-->
+<!--        <property name="sessionFactory">-->
+<!--            <ref bean="sessionFactory"/>-->
+<!--        </property>-->
+<!--    </bean>-->
+
+
+    <bean id="datasource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="${db.driver}"/>
+        <property name="jdbcUrl" value="${db.url}"/>
+        <property name="user" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+        <property name="minPoolSize" value="${db.pool.min}"/>
+        <property name="maxPoolSize" value="${db.pool.max}"/>
         <property name="acquireIncrement" value="5"/>
         <property name="idleConnectionTestPeriod" value="3000"/>
         <property name="maxStatements" value="50"/>
@@ -71,5 +61,8 @@
     <context:component-scan base-package="com.goldenconsultingci.erp.common.spring.security"/>
     <bean id="webConfig" class="com.goldenconsultingci.erp.common.spring.security.WebConfig" autowire="byName"/>
     <bean id="securityConfig" class="com.goldenconsultingci.erp.common.spring.security.SecurityConfig" autowire="byName"/>
-<!--    <bean id="sessionProvider" class="com.goldenconsultingci.erp.common.spring.security.SpringHibernateSessionProvider" autowire="byName" />-->
+    <bean id="sessionProvider" class="com.goldenconsultingci.erp.common.spring.hibernate.SpringHibernateSessionProvider" autowire="byName" />
+
+    <bean id="jWTManager" class="com.goldenconsultingci.erp.common.spring.security.JWTManager" autowire="byName"/>
+<!--    <bean id="securityService" class="com.goldenconsultingci.erp.common.spring.security.SecurityService"/>-->
 </beans>

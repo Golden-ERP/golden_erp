@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-access="field" default-cascade="all">
+    <class name="com.goldenconsultingci.erp.courier.domain.Courrier" table="tbl_crr_courier" lazy="true">
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native"/>
+        </id>
+        <component name="courrierId" class="com.goldenconsultingci.erp.courier.domain.CourrierId">
+            <property name="id" column="courrier_id_id" type="string"/>
+        </component>
+        <property name="type" column="type">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.goldenconsultingci.erp.courier.domain.CourrierType</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+        <property name="reference" column="reference" type="string"/>
+        <property name="object" column="object" type="string"/>
+        <property name="siteId" column="site_id" type="string"/>
+        <property name="registrationNumber" column="registration_number" type="string"/>
+        <property name="state" column="state">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.goldenconsultingci.erp.courier.domain.CourrierState</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+        <property name="arrivalDate" column="arrival_date" type="java.time.LocalDate"/>
+        <property name="courrierDate" column="courrier_date" type="java.time.LocalDate"/>
+        <set name="tasks" cascade="all,delete-orphan" inverse="false" lazy="true">
+            <key column="courrier_id" not-null="true"/>
+            <one-to-many class="com.goldenconsultingci.erp.courier.domain.Task" />
+        </set>
+        <set name="acknowledgments" lazy="false">
+            <key column="courrier_id" not-null="true"/>
+            <composite-element class="com.goldenconsultingci.erp.courier.domain.Acknowledgment">
+                <property name="actor" column="actor" type="string"/>
+                <property name="date" column="date" type="java.time.LocalDateTime"/>
+            </composite-element>
+        </set>
+        <property name="createdDate" column="created_date" type="java.time.LocalDateTime"/>
+    </class>
+</hibernate-mapping>

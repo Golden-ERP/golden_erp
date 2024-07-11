@@ -10,11 +10,8 @@ import org.springframework.context.annotation.ImportResource;
 
 @SpringBootApplication
 //@Import({com.goldenconsultingci.erp.common.spring.security.SecurityConfig.class})
-@ComponentScan(basePackages = {"com.goldenconsultingci.erp.identityaccess.presentation"})
-@ImportResource({"classpath:applicationContext-common.xml",
-        "classpath:applicationContext-identityaccess.xml",
-        "classpath:applicationContext-identityaccess-application.xml"
-    })
+@ComponentScan(basePackages = {"com.goldenconsultingci.erp"})
+@ImportResource({"classpath:applicationContext.xml"})
 @EnableAutoConfiguration(exclude = HibernateJpaAutoConfiguration.class)
 public class BootstrapApplication {
     public static void main( String[] args ) {

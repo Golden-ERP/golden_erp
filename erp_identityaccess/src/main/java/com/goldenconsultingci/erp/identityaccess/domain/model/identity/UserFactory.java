@@ -1,13 +1,9 @@
 package com.goldenconsultingci.erp.identityaccess.domain.model.identity;
 
-public class UserRegistrationService {
-    private UserRepository userRepository;
+public class UserFactory {
 
-    public UserRegistrationService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    public User registerUser(
+    private UserFactory() {}
+    public static User registerUser(
             String anUsername,
             String aPassword,
             FullName aName,
@@ -24,7 +20,6 @@ public class UserRegistrationService {
 
         actor.internalOnlySetUser(user);
         user.activate();
-        userRepository.add(user);
         return user;
     }
 }

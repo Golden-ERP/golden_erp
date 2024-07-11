@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-access="field" default-cascade="all">
+    <class name="com.goldenconsultingci.erp.courier.domain.Task" table="tbl_crr_task" lazy="true">
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native"/>
+        </id>
+        <component name="taskId" class="com.goldenconsultingci.erp.courier.domain.TaskId">
+            <property name="id" column="task_id" type="string"/>
+        </component>
+        <component name="courrierId" class="com.goldenconsultingci.erp.courier.domain.CourrierId">
+            <property name="id" column="courrier_id_id" type="string"/>
+        </component>
+        <property name="instruction" column="instruction" type="string"/>
+        <property name="remark" column="remark" type="string"/>
+        <set name="shareHolders" lazy="false">
+            <key column="task_id" not-null="true" />
+            <composite-element class="com.goldenconsultingci.erp.courier.domain.ShareHolder">
+                <property name="role" column="share_holder_role" type="string"/>
+                <property name="identity" column="share_holder_identity" type="string"/>
+                <property name="name" column="share_holder_name" type="string"/>
+                <property name="siteId" column="share_holder_site_id" type="string"/>
+            </composite-element>
+        </set>
+    </class>
+</hibernate-mapping>

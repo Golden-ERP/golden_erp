@@ -11,6 +11,7 @@ public class Actor extends ConcurrencySafeEntity {
     private Gender gender;
     private Direction direction;
     private String occupation;
+    private Site site;
 
     protected Actor() {
         super();
@@ -28,6 +29,10 @@ public class Actor extends ConcurrencySafeEntity {
         this.setContactInformation(aContactInformation);
     }
 
+    private void setSite(Site aSite) {
+        this.assertArgumentNotNull(aSite, "Le sitedoit être founi.");
+        this.site = aSite;
+    }
     private void setDirection(Direction aDirection) {
         this.assertArgumentNotNull(aDirection, "La direction de rattachement est réquise.");
         this.direction = aDirection;
@@ -56,6 +61,11 @@ public class Actor extends ConcurrencySafeEntity {
     protected void setUser(User anUser) {
         this.assertArgumentNotNull(anUser, "L'utilisateur est réquis.");
         this.user = anUser;
+    }
+
+
+    public Site site() {
+        return site;
     }
 
     public FullName name() {
@@ -87,5 +97,9 @@ public class Actor extends ConcurrencySafeEntity {
 
     public void internalOnlySetUser(User anUser) {
         this.setUser(anUser);
+    }
+
+    public void changeSite(Site aSite) {
+        this.setSite(aSite);
     }
 }

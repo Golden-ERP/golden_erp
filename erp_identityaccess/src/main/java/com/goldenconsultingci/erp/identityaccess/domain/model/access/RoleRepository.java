@@ -8,4 +8,6 @@ public interface RoleRepository {
     Role ofId(long id);
     List<Role> findAll();
     void remove(Role aRole);
+
+    Role roleNamed(String aRoleName);
 }
