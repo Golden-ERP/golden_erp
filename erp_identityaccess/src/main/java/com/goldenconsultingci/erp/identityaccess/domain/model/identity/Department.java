@@ -4,7 +4,8 @@ import com.goldenconsultingci.erp.common.domain.Entity;
 
 import java.io.Serializable;
 
-public class Department extends Entity implements Serializable {
+public class
+Department extends Entity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private String name;

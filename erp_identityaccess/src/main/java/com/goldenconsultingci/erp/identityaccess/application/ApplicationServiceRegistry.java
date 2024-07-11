@@ -13,6 +13,13 @@ public class ApplicationServiceRegistry implements ApplicationContextAware {
                         .applicationContext
                         .getBean("identityApplicationService");
     }
+
+    public static SettingApplicationService settingApplicationService() {
+        return (SettingApplicationService)
+                ApplicationServiceRegistry
+                        .applicationContext
+                        .getBean("settingApplicationService");
+    }
     @Override
     public synchronized void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         if (ApplicationServiceRegistry.applicationContext == null) {

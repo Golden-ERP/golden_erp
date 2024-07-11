@@ -22,6 +22,6 @@
         </component>
         <property name="numberOfRepresentations" column="number_of_representations" type="java.lang.Integer"/>
         <property name="activityArea" column="activity_area" type="java.lang.String"/>
-        <property name="taxSystem" column="tax_system" type="com.goldenconsultingci.erp.identityaccess.domain.model.identity.TaxSystem"/>
+        <property name="taxSystem" column="tax_system" type="com.goldenconsultingci.erp.common.domain.TaxSystem"/>
     </class>
 </hibernate-mapping>

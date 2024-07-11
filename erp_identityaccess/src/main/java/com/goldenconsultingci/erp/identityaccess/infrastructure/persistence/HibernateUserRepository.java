@@ -6,6 +6,7 @@ import com.goldenconsultingci.erp.identityaccess.domain.model.identity.UserRepos
 import org.hibernate.query.Query;
 
 import java.util.Collection;
+import java.util.List;
 
 public class HibernateUserRepository
     extends AbstractHibernateSession implements UserRepository {
@@ -17,8 +18,8 @@ public class HibernateUserRepository
     @Override
     public User userWithUsername(String anUsername) {
         Query query = this.session().createQuery(
-                "from User as _obj_ where _obj_.username = ?");
-        query.setParameter(0, anUsername);
+                "from User _obj_ where _obj_.username = ?1");
+        query.setParameter(1, anUsername);
         return (User) query.uniqueResult();
     }
 
@@ -26,5 +27,10 @@ public class HibernateUserRepository
     public Collection<User> allUsers() {
         Query query = this.session().createQuery("from User");
         return query.list();
+    }
+
+    @Override
+    public List<User> withRole(String aRoleName) {
+        return null;
     }
 }

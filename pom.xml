@@ -18,7 +18,8 @@
 		<module>erp_identityaccess</module>
 		<module>erp_bootstrap</module>
 		<module>erp_courrier</module>
-	</modules>
+        <module>erp_juridique</module>
+    </modules>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -41,11 +42,6 @@
 			<dependency>
 				<groupId>com.goldenconsultingci</groupId>
 				<artifactId>erp_courrier</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.goldenconsultingci</groupId>
-				<artifactId>erp_juridique</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
@@ -83,6 +79,11 @@
 				<groupId>org.hibernate.orm</groupId>
 				<artifactId>hibernate-core</artifactId>
 				<version>6.5.2.Final</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springdoc</groupId>
+				<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+				<version>2.5.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

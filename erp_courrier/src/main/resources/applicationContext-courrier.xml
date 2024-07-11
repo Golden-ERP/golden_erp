@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:tx="http://www.springframework.org/schema/tx"
+        xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+		https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		https://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx
+		https://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/aop
+		https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+        <aop:aspectj-autoproxy/>
+
+        <context:annotation-config />
+
+        <tx:annotation-driven transaction-manager="courrierTransactionManager"/>
+        <context:component-scan base-package="com.goldenconsultingci.erp"/>
+        <bean id="courrierSessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+            <property name="dataSource" ref="datasource"/>
+            <property name="configLocation">
+                <value>classpath:hibernate-courrier.cfg.xml</value>
+            </property>
+        </bean>
+        <bean id="courrierTransactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+            <property name="sessionFactory">
+                <ref bean="courrierSessionFactory"/>
+            </property>
+            <qualifier value="courrier"/>
+        </bean>
+
+    <bean id="corurrierRepository" class="com.goldenconsultingci.erp.courier.infrastructure.persistence.HibernateCorurrierRepository" >
+        <constructor-arg ref="courrierSessionFactory"/>
+    </bean>
+    <bean id="swaggerDocConfig" class="com.goldenconsultingci.erp.common.SwaggerDocConfig"/>
+    <bean id="applicationServiceRegistry" class="com.goldenconsultingci.erp.courier.application.ApplicationServiceRegistry" autowire="byName"/>
+    <bean id="courrierApplicationService" class="com.goldenconsultingci.erp.courier.application.CourrierApplicationService" autowire="byName"/>
+    <bean id="employeeService" class="com.goldenconsultingci.erp.courier.infrastructure.service.UserToEmployeeService" autowire="byName"/>
+</beans>
