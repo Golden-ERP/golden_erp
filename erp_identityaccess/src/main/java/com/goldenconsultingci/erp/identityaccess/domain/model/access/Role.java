@@ -7,7 +7,6 @@ import com.goldenconsultingci.erp.identityaccess.domain.model.identity.Departmen
 public class Role extends ConcurrencySafeEntity {
     private String name;
     private String description;
-
     protected Role() {
         super();
     }
@@ -33,5 +32,9 @@ public class Role extends ConcurrencySafeEntity {
 
     public String description() {
         return description;
+    }
+
+    public String getName() {
+        return name;
     }
 }

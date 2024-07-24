@@ -8,9 +8,9 @@ public class RegisterUserCommand {
     private String username;
     private String password;
     private String gender;
-    private String occupation;
+    private String responsibility;
 
-    public RegisterUserCommand(String firstName, String lastName, String emailAddress, String telephone, String username, String password, String gender, String occupation) {
+    public RegisterUserCommand(String firstName, String lastName, String emailAddress, String telephone, String username, String password, String gender, String responsibility) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailAddress = emailAddress;
@@ -18,7 +18,7 @@ public class RegisterUserCommand {
         this.username = username;
         this.password = password;
         this.gender = gender;
-        this.occupation = occupation;
+        this.responsibility = responsibility;
     }
 
     public String firstName() {
@@ -49,7 +49,7 @@ public class RegisterUserCommand {
         return gender;
     }
 
-    public String occupation() {
-        return occupation;
+    public String responsibility() {
+        return responsibility;
     }
 }

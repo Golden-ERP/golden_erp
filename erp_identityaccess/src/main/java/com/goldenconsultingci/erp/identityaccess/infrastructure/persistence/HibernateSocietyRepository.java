@@ -21,4 +21,11 @@ public class HibernateSocietyRepository
             return  null;
         }
     }
+
+    @Override
+    public long count() {
+        return this.session()
+                .createQuery("select count(s) from Society s", Long.class)
+                .getSingleResult();
+    }
 }

@@ -9,14 +9,14 @@ public enum SiteType {
         this.name = aName;
     }
 
-    public SiteType from(String aName) {
+    public static SiteType from(String aName) {
         for (SiteType s: SiteType.values()) {
             if (s.name().equalsIgnoreCase(aName)) {
                 return s;
             }
         }
 
-        throw new IllegalArgumentException("Type de site nom supporté.");
+        throw new IllegalArgumentException("Type de site nom supporté. BUREAUX DE REPRESENTATION, AGENCES, FILIALES");
     }
 
 

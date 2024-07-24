@@ -10,7 +10,7 @@ public class Task extends Entity {
     private CourrierId courrierId;
     private String instruction;
     private String remark;
-    private Set<ShareHolder> shareHolders;
+    private ShareHolder shareHolder;
 
     private Task() {
         super();
@@ -21,11 +21,11 @@ public class Task extends Entity {
             CourrierId aCourrierId,
             String instruction,
             String remark,
-            Set<ShareHolder> aShareHolder) {
+            ShareHolder aShareHolder) {
         this();
         this.setTaskId(aTaskId);
         this.setCourrierId(aCourrierId);
-        this.setShareHolders(aShareHolder);
+        this.setShareHolder(aShareHolder);
         this.setInstruction(instruction);
         this.setRemark(remark);
     }
@@ -48,9 +48,9 @@ public class Task extends Entity {
         this.courrierId =  aCourrierId;
     }
 
-    private void setShareHolders(Set<ShareHolder> aShareHolders) {
-        this.assertArgumentNotNull(aShareHolders, "Le destinataire est réquis.");
-        this.shareHolders =  aShareHolders;
+    private void setShareHolder(ShareHolder aShareHolder) {
+        this.assertArgumentNotNull(aShareHolder, "Le destinataire est réquis.");
+        this.shareHolder =  aShareHolder;
     }
 
 //    private void setName(String aTaskName) {
@@ -66,8 +66,8 @@ public class Task extends Entity {
         return remark;
     }
 
-    public Set<ShareHolder> shareHolders() {
-        return shareHolders;
+    public ShareHolder shareHolder() {
+        return shareHolder;
     }
 
     public TaskId taskId() {

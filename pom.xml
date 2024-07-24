@@ -6,12 +6,13 @@
 	<artifactId>golden_erp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>erp</name>
+	<name>golden_erp</name>
 	<description>ERP - Identity and Access</description>
 	<properties>
 		<java.version>17</java.version>
 		<commons-lang3.version>3.14.0</commons-lang3.version>
 		<jackson.version>2.17.1</jackson.version>
+		<springframewoork.version>6.1.11</springframewoork.version>
 	</properties>
 	<modules>
 		<module>erp_common</module>
@@ -29,6 +30,15 @@
 				<version>3.2.5</version>
 				<scope>import</scope>
 			</dependency>
+			<!-- https://mvnrepository.com/artifact/org.springframework/spring-framework-bom -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-framework-bom</artifactId>
+				<version>${springframewoork.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
 			<dependency>
 				<groupId>com.goldenconsultingci</groupId>
 				<artifactId>erp_identityaccess</artifactId>
@@ -48,7 +58,7 @@
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-orm</artifactId>
-				<version>6.0.11</version>
+				<version>6.1.11</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>
@@ -85,6 +95,29 @@
 				<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 				<version>2.5.0</version>
 			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-tx</artifactId>
+				<version>${springframewoork.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-aop</artifactId>
+				<version>${springframewoork.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${springframewoork.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-beans</artifactId>
+				<version>${springframewoork.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
 </project>
+

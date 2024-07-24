@@ -49,7 +49,7 @@
     <bean id="datasource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
         <property name="driverClass" value="${db.driver}"/>
         <property name="jdbcUrl" value="${db.url}"/>
-        <property name="user" value="${db.username}"/>
+        <property name="user" value="${db.user}"/>
         <property name="password" value="${db.password}"/>
         <property name="minPoolSize" value="${db.pool.min}"/>
         <property name="maxPoolSize" value="${db.pool.max}"/>

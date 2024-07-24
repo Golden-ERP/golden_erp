@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -20,23 +21,31 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "courriers")
+@CrossOrigin("*")
 @Tag(name = "Courrier Managment", description = "Gestion des courriers")
 @SecurityRequirement(name = "Authorization")
 public class CourrierResource {
 
     @Operation(operationId = "Register Courrier", description = "Enregistrement d'un courrier.")
     @PostMapping(path = "/register")
-    public ResponseEntity<CourrierRepresentation> registerCourrier(@RequestBody RegisterCourrierDto body) {
+    public ResponseEntity<CourrierRepresentation> registerCourrier(
+            @RequestParam(name = "type") String type,
+            @RequestParam(name = "reference") String reference,
+            @RequestParam(name = "object") String object,
+            @RequestParam(name = "courrierDate") String courrierDate,
+            @RequestParam(name = "registrationNumber") String registrationNumber,
+            @RequestParam(name = "sender") String sender,
+            @RequestParam(name = "arrivalDate") String arrivalDate,
+            @RequestParam(name = "file") MultipartFile file) {
         Courrier courrier = ApplicationServiceRegistry
                 .courrierApplicationService()
                 .registerNewCourrier(new RegisterNewCourrierCommand(
-                        body.getType(),
-                        body.getReference(),
-                        body.getObject(),
-                        body.getSiteId(),
-                        DateConverter.toDate(body.getCourrierDate()),
-                        body.getRegistrationNumber(),
-                        DateConverter.toDate(body.getArrivalDate())));
+                        type,
+                        reference,
+                        object,
+                        DateConverter.toDate(courrierDate),
+                        registrationNumber,
+                        DateConverter.toDate(arrivalDate)));
 
         return ResponseEntity.status(201)
                 .body(new CourrierRepresentation(courrier));
@@ -50,7 +59,7 @@ public class CourrierResource {
                 .courrierApplicationService()
                 .imputCourrierToShareholder(new ImputCourrierCommand(
                         courrierId,
-                        body.getIdentities(),
+                        body.getIdentity(),
                         body.getInstructions(),
                         body.getRemark()));
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -91,6 +100,16 @@ public class CourrierResource {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @GetMapping(path = "/myCourriers")
+    public ResponseEntity<List<CourrierRepresentation>> myCourriers() {
+        List<CourrierRepresentation> representations = ApplicationServiceRegistry
+                .courrierApplicationService()
+                .myCourriers()
+                .stream()
+                .map(CourrierRepresentation::new)
+                .toList();
+        return ResponseEntity.status(200).body(representations);
+    }
     @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})
     public ResponseEntity<String> exceptionHandler(Exception ex) {
         Map<String, String> errMes = Map.of("message", ex.getMessage());

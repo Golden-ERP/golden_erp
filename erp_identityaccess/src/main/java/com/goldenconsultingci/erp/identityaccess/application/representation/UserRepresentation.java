@@ -24,7 +24,7 @@ public class UserRepresentation {
         this.lastName = anUser.name().lastName();
         this.telephone = anUser.telephone().number();
         this.emailAddress = anUser.emailAddress().address();
-        this.occupation = anUser.actor().occupation();
+//        this.occupation = anUser.actor().occupation();
         this.gender = anUser.actor().gender().toString();
     }
 }

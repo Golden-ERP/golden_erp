@@ -12,4 +12,8 @@ public interface UserRepository {
     Collection<User> allUsers();
 
     List<User> withRole(String aRoleName);
+
+    List<User> userInSite(String aSiteId);
+
+    List<User> userInResponsibility(String aResponsibilityName);
 }

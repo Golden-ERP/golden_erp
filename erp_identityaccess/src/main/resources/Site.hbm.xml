@@ -8,7 +8,12 @@
         </id>
         <property name="siteId" column="site_id" type="string" unique="true"/>
         <property name="name" column="name" type="java.lang.String" unique="true" />
-        <property name="type" type="com.goldenconsultingci.erp.identityaccess.domain.model.identity.SiteType"/>
+        <property name="type" column="type">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.goldenconsultingci.erp.identityaccess.domain.model.identity.SiteType</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
         <component name="geographicalAddress" class="com.goldenconsultingci.erp.identityaccess.domain.model.identity.GeographicalAddress">
             <property name="street" column="geographical_address_street" type="java.lang.String"/>
             <property name="city" column="geographical_address_city" type="java.lang.String"/>

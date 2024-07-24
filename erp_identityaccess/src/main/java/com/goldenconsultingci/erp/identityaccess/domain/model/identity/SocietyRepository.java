@@ -4,4 +4,5 @@ public interface SocietyRepository {
     void save(Society aSociety);
     Society findSociety();
 
+    long count();
 }

@@ -4,6 +4,7 @@ import com.goldenconsultingci.erp.common.persistence.hibernate.AbstractHibernate
 import com.goldenconsultingci.erp.courier.domain.Courrier;
 import com.goldenconsultingci.erp.courier.domain.CourrierId;
 import com.goldenconsultingci.erp.courier.domain.CourrierRepository;
+import com.goldenconsultingci.erp.courier.domain.Task;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -43,6 +44,14 @@ public class HibernateCorurrierRepository implements CourrierRepository {
     @Override
     public void delete(Courrier courrier) {
         this.session().remove(courrier);
+    }
+
+    @Override
+    public List<Courrier> courriersOfShareHolder(String anUsername) {
+        return this.session().createQuery("from Courrier __obj__ where __obj__.courrierId IN " +
+                "(select t.courrierId from Task t where t.shareHolder.identity =?1)", Courrier.class)
+                .setParameter(1, anUsername)
+                .getResultList();
     }
 
 

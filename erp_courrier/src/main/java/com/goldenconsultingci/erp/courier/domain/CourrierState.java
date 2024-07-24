@@ -28,7 +28,6 @@ public enum CourrierState {
     public boolean isInSubmitted() {
         return false;
     }
-
     public boolean isInDraft() {
         return false;
     }

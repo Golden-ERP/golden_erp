@@ -24,9 +24,14 @@
             <property name="firstName" column="first_name" type="java.lang.String"/>
             <property name="lastName" column="last_name" type="java.lang.String"/>
         </component>
-        <property name="gender" column="gender" type="com.goldenconsultingci.erp.identityaccess.domain.model.identity.Gender"/>
-        <property name="occupation" column="occupation" type="java.lang.String"/>
+        <property name="gender" column="gender" >
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.goldenconsultingci.erp.identityaccess.domain.model.identity.Gender</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
         <one-to-one name="user"  class="com.goldenconsultingci.erp.identityaccess.domain.model.identity.User" cascade="all" lazy="false" constrained="true"/>
         <many-to-one name="site" class="com.goldenconsultingci.erp.identityaccess.domain.model.identity.Site" column="site_id" />
+        <many-to-one name="responsibility" class="com.goldenconsultingci.erp.identityaccess.domain.model.identity.Responsibility" column="responsibility_id" />
     </class>
 </hibernate-mapping>

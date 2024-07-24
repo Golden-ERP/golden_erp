@@ -1,11 +1,8 @@
 package com.goldenconsultingci.erp.identityaccess.domain.model.identity;
 
 import com.goldenconsultingci.erp.common.domain.ConcurrencySafeEntity;
-import com.goldenconsultingci.erp.common.domain.TaxSystem;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.Set;
 
 public class Society extends ConcurrencySafeEntity implements Serializable {
     private static final long serialVersionUID = 1L;

@@ -2,14 +2,15 @@ package com.goldenconsultingci.erp.courier.application;
 
 public class ImputCourrierCommand {
     private String courrierId;
-    private String[] identities;
+//    private String[] identities;
+    private String role;
     private String[] instructions;
     private String remark;
     private String siteId;
 
-    public ImputCourrierCommand(String courrierId, String[] identities, String[] instructions, String remark) {
+    public ImputCourrierCommand(String courrierId, String role, String[] instructions, String remark) {
         this.courrierId = courrierId;
-        this.identities = identities;
+        this.role = role;
         this.instructions = instructions;
         this.remark = remark;
     }
@@ -18,8 +19,8 @@ public class ImputCourrierCommand {
         return courrierId;
     }
 
-    public String[] identities() {
-        return identities;
+    public String role() {
+        return role;
     }
 
     public String[] instructions() {
