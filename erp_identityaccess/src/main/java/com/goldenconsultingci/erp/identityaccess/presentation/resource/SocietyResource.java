@@ -3,8 +3,10 @@ package com.goldenconsultingci.erp.identityaccess.presentation.resource;
 import com.goldenconsultingci.erp.common.ObjectSerializer;
 import com.goldenconsultingci.erp.identityaccess.application.command.CreateSiteCommand;
 import com.goldenconsultingci.erp.identityaccess.application.command.ProvisionTenantCommand;
+import com.goldenconsultingci.erp.identityaccess.application.representation.ResponsibilityRepresentation;
 import com.goldenconsultingci.erp.identityaccess.application.representation.SiteRepresentation;
 import com.goldenconsultingci.erp.identityaccess.application.representation.SocietyRepresentation;
+import com.goldenconsultingci.erp.identityaccess.domain.model.access.Role;
 import com.goldenconsultingci.erp.identityaccess.domain.model.identity.*;
 import com.goldenconsultingci.erp.identityaccess.presentation.CreateSiteDto;
 import org.springframework.http.HttpStatus;
@@ -105,6 +107,52 @@ public class SocietyResource extends AbstractResource{
                 .departmentsOfDirection(aDirectionName);
         return ResponseEntity.status(201)
                 .body(ObjectSerializer.instance().serialize(departments));
+    }
+
+    @PostMapping(path = "/responsibilities", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponsibilityRepresentation> createResponsibility(
+            @RequestParam(name = "name") String name,
+            @RequestParam(name = "description") String description) {
+        Responsibility responsibility = this.identityApplicationService()
+                .createResponsibility(name, description);
+        return ResponseEntity.status(200)
+                .body(new ResponsibilityRepresentation(responsibility));
+    }
+
+    @PostMapping(path = "/responsibilities/{responsibility}/addRole/{role}")
+    public ResponseEntity<Void> addRoleToResponsibility(
+            @PathVariable(name = "responsibility") String aResponsibilityName,
+            @PathVariable(name = "role") String aRoleName) {
+        this.identityApplicationService()
+                .addRoleToResponsibility(aResponsibilityName, aRoleName);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping(path = "/responsibilities")
+    public ResponseEntity<Set<ResponsibilityRepresentation>> listResponseEntity() {
+        Set<ResponsibilityRepresentation> representations =
+                this.identityApplicationService()
+                .findResponsibilities()
+                .stream()
+                .map(ResponsibilityRepresentation::new)
+                .collect(Collectors.toSet());
+        return ResponseEntity.status(200).body(representations);
+    }
+
+    @PostMapping(path = "/roles")
+    public ResponseEntity<Role> createRole(
+            @RequestParam(name = "name") String aRoleName,
+            @RequestParam(name = "description") String aDescription) {
+        Role role = this.identityApplicationService()
+                .createRole(aRoleName, aDescription);
+        return ResponseEntity.status(200).body(role);
+    }
+
+    @GetMapping(path = "/roles")
+    public ResponseEntity<List<Role>> listRoles() {
+        List<Role> roles = this.identityApplicationService()
+                .listRoles();
+        return ResponseEntity.status(200).body(roles);
     }
 
     private SocietyRepresentation toTenantRepresentation(Society aSociety) {

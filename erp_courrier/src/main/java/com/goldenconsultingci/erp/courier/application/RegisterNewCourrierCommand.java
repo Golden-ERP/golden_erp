@@ -1,11 +1,8 @@
 package com.goldenconsultingci.erp.courier.application;
 
-import com.goldenconsultingci.erp.common.domain.TaxSystem;
-import com.goldenconsultingci.erp.courier.domain.CourrierId;
-import com.goldenconsultingci.erp.courier.domain.CourrierType;
+
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class RegisterNewCourrierCommand {
     private String type;
@@ -16,11 +13,10 @@ public class RegisterNewCourrierCommand {
     private String registrationNumber;
     private LocalDate arrivalDate;
 
-    public RegisterNewCourrierCommand(String type, String reference, String object, String siteId, LocalDate courrierDate, String registrationNumber, LocalDate arrivalDate) {
+    public RegisterNewCourrierCommand(String type, String reference, String object, LocalDate courrierDate, String registrationNumber, LocalDate arrivalDate) {
         this.type = type;
         this.reference = reference;
         this.object = object;
-        this.siteId = siteId;
         this.courrierDate = courrierDate;
         this.registrationNumber = registrationNumber;
         this.arrivalDate = arrivalDate;

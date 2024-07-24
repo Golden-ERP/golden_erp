@@ -25,7 +25,6 @@ public class SecurityService {
         return stringValue("siteId");
     }
 
-
     private static String stringValue(String aKey) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {

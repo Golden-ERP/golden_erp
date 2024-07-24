@@ -20,7 +20,7 @@ public class HibernateRoleRepository
 
     @Override
     public List<Role> findAll() {
-        return null;
+        return this.session().createQuery("from Role", Role.class).getResultList();
     }
 
     @Override
@@ -29,7 +29,7 @@ public class HibernateRoleRepository
 
     @Override
     public Role roleNamed(String aRoleName) {
-        return this.session().createQuery("select r from r Role where r.name = :name", Role.class)
+        return this.session().createQuery("from  Role r where r.name = :name", Role.class)
                 .setParameter("name", aRoleName)
                 .uniqueResult();
 

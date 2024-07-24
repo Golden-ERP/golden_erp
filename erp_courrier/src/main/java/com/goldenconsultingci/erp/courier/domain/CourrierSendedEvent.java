@@ -4,7 +4,7 @@ import com.goldenconsultingci.erp.common.domain.DomainEvent;
 
 import java.time.LocalDateTime;
 
-public class CourrierSended implements DomainEvent {
+public class CourrierSendedEvent implements DomainEvent {
     private CourrierId courrierId;
     private LocalDateTime occurredOn;
 

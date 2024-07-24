@@ -1,18 +1,11 @@
 package com.goldenconsultingci.erp.courier.application;
 
-import com.goldenconsultingci.erp.common.DateConverter;
-import com.goldenconsultingci.erp.common.ObjectSerializer;
-import com.goldenconsultingci.erp.common.domain.TaxSystem;
+
 import com.goldenconsultingci.erp.common.spring.security.SecurityService;
 import com.goldenconsultingci.erp.courier.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -44,12 +37,13 @@ public class CourrierApplicationService{
     public void imputCourrierToShareholder(ImputCourrierCommand aCommand) {
         String siteId = SecurityService.currentSite();
         Courrier courrier = this.nonNullCourrier(aCommand.courrierId());
-        Set<ShareHolder> shareHolders = Arrays.asList(aCommand.identities())
-                .stream()
-                .map(id -> employeeService.shareHolderFrom(id, siteId))
-                .collect(Collectors.toSet());
+        ShareHolder shareHolder = employeeService.employeeFromResponsibility(aCommand.role(), siteId);
+//        Set<ShareHolder> shareHolders = Arrays.asList(aCommand.identities())
+//                .stream()
+//                .map(id -> employeeService.shareHolderFrom(id, siteId))
+//                .collect(Collectors.toSet());
         courrier.imputeTo(
-                shareHolders,
+                shareHolder,
                 String.join(";", aCommand.instructions()),
                 aCommand.remark());
     }
@@ -65,7 +59,8 @@ public class CourrierApplicationService{
     }
 
     public List<Courrier> myCourriers() {
-        return Collections.emptyList();
+        return this.courrierRepository
+                .courriersOfShareHolder(SecurityService.currentUsername());
     }
 
     @CourrierTx
@@ -96,6 +91,10 @@ public class CourrierApplicationService{
             }
             this.courrierRepository.delete(courrier);
         }
+    }
+
+    public List<Courrier> courriersAssignedToEmployee(String anUsername) {
+        return this.courrierRepository.courriersOfShareHolder(anUsername);
     }
 
     private Courrier nonNullCourrier(String aCourrierId) {

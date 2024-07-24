@@ -3,6 +3,7 @@ package com.goldenconsultingci.erp.identityaccess.presentation.resource;
 import com.goldenconsultingci.erp.common.ObjectSerializer;
 import com.goldenconsultingci.erp.identityaccess.application.command.RegisterUserCommand;
 import com.goldenconsultingci.erp.identityaccess.application.representation.AccessTokenRepresentation;
+import com.goldenconsultingci.erp.identityaccess.application.representation.UserInResponsibilityRepresentation;
 import com.goldenconsultingci.erp.identityaccess.application.representation.UserInSiteRepresentation;
 import com.goldenconsultingci.erp.identityaccess.application.representation.UserRepresentation;
 import com.goldenconsultingci.erp.identityaccess.domain.model.identity.User;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/iam/actors")
+@CrossOrigin("*")
 public class ActorResource extends AbstractResource {
 
     @PostMapping(path = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -82,6 +84,28 @@ public class ActorResource extends AbstractResource {
         }
 
         return  ResponseEntity.status(200).body(new UserInSiteRepresentation(user, sitesId));
+    }
+
+    @GetMapping(path = "/inResponsibility/{responsibility}/site/{siteId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserInResponsibilityRepresentation> getUserInResponsibility(
+            @PathVariable(name = "responsibility") String aResponsibility,
+            @PathVariable(name = "siteId") String sitesId) {
+        User user = this.identityApplicationService()
+                .userInResponsibility(sitesId, aResponsibility);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return  ResponseEntity.status(200).body(new UserInResponsibilityRepresentation(user, aResponsibility, sitesId));
+    }
+
+    @PostMapping(path = "/{username}/assignResponsibility/{responsibility}")
+    public ResponseEntity<Void> assignResponsibilityToACtor(
+            @PathVariable(name = "username") String aUsername,
+            @PathVariable(name = "responsibility") String aResponsibility) {
+        this.identityApplicationService()
+                .changeResponsibilityOfActor(aUsername, aResponsibility);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
     private ResponseEntity<Map<String, String>> badCredentialResponse() {
         return ResponseEntity.status(404)

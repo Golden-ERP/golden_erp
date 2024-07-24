@@ -1,14 +1,13 @@
 package com.goldenconsultingci.erp.identityaccess.application;
 
-import com.goldenconsultingci.erp.common.domain.TaxSystem;
+import com.goldenconsultingci.erp.identityaccess.domain.model.identity.TaxSystem;
 import com.goldenconsultingci.erp.identityaccess.application.command.CreateSiteCommand;
 import com.goldenconsultingci.erp.identityaccess.application.command.ProvisionTenantCommand;
 import com.goldenconsultingci.erp.identityaccess.application.command.RegisterUserCommand;
+import com.goldenconsultingci.erp.identityaccess.domain.model.access.Role;
 import com.goldenconsultingci.erp.identityaccess.domain.model.access.RoleRepository;
 import com.goldenconsultingci.erp.identityaccess.domain.model.identity.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
@@ -33,6 +32,8 @@ public class IdentityApplicationService {
     private UserRepository userRepository;
     @Autowired
     private AuthenticationService authenticationService;
+    @Autowired
+    private ResponsibilityRepository responsibilityRepository;
 
     /**
      * provisionSociety - Provision les information d'une société
@@ -41,6 +42,7 @@ public class IdentityApplicationService {
      */
     @IamTx
     public Society provisionSociety(ProvisionTenantCommand aCommand) {
+        this.assertSocietyNotProvisioned();
         Society society = this.societyProvisionService.provisionTenant(
                 aCommand.name(),
                 aCommand.sigle(),
@@ -50,8 +52,7 @@ public class IdentityApplicationService {
                 new EmailAddress(aCommand.emailAddress()),
                 aCommand.numberOfRepresentations(),
                 aCommand.activityArea(),
-                TaxSystem.valueOf(aCommand.taxSystem()));
-
+                TaxSystem.from(aCommand.taxSystem()));
         return society;
     }
 
@@ -73,7 +74,7 @@ public class IdentityApplicationService {
         return this.siteProvisionService
                 .provisionSite(
                         aCommand.name(),
-                        SiteType.valueOf(aCommand.type()),
+                        SiteType.from(aCommand.type()),
                         new GeographicalAddress(
                                 aCommand.addressStreet(),
                                 aCommand.addressCity(),
@@ -90,13 +91,12 @@ public class IdentityApplicationService {
      * @return liste {@link Site}
      * @param <T>
      */
-    @Transactional(readOnly = true)
+    @Transactional(value = "iam", readOnly = true)
     public <T> List<T> listSites(Function<Site, T> assembler) {
         return this.siteRepository.findAll()
                 .stream()
                 .map(assembler)
                 .toList();
-
     }
 
     public Site findSite(String anIdentity) {
@@ -124,8 +124,7 @@ public class IdentityApplicationService {
                 new EmailAddress(aCommand.emailAddress()),
                 new Telephone(aCommand.telephone()),
                 Gender.valueOf(aCommand.gender()),
-                aCommand.occupation());
-
+                this.findResponsibility(aCommand.responsibility()));
         userRepository.add(user);
         return user;
     }
@@ -232,8 +231,19 @@ public class IdentityApplicationService {
                 userInSite = user;
             }
         }
-
         return userInSite;
+    }
+
+    public User userInResponsibility(String aSiteId, String aResponsibilityName) {
+        List<User> users = this.userRepository.userInSite(aSiteId)
+                .stream()
+                .filter(user -> user.actor().responsibility().name().equals(aResponsibilityName))
+                .toList();
+        if (users.size() > 0) {
+            return users.get(0);
+        }
+        return null;
+
     }
 
     private User nonNulUser(String anUsername) {
@@ -245,4 +255,56 @@ public class IdentityApplicationService {
         return user;
     }
 
+    public Responsibility findResponsibility(String aResponsibilityName) {
+        return this.responsibilityRepository.named(aResponsibilityName);
+    }
+    @IamTx
+    public Responsibility createResponsibility(String aName, String aDescription) {
+        Responsibility responsibility = new Responsibility(aName, aDescription);
+        this.responsibilityRepository.add(responsibility);
+        return responsibility;
+    }
+
+    @IamTx
+    public void addRoleToResponsibility(String aResponsibilityName, String aRoleName) {
+        Role role = this.roleRepository.roleNamed(aRoleName);
+        this.nonNullResponsibility(aResponsibilityName).addRole(role);
+    }
+
+    public Set<Responsibility> findResponsibilities() {
+        return this.responsibilityRepository.findAll();
+    }
+
+    private Responsibility nonNullResponsibility(String aResponsibilityName) {
+        Responsibility responsibility = this.findResponsibility(aResponsibilityName);
+        if (responsibility == null) {
+            throw new IllegalArgumentException("Responsabilité introuvable.");
+        }
+
+        return responsibility;
+    }
+
+    @IamTx
+    public Role createRole(String aRoleName, String aDescription) {
+        Role role = new Role(aRoleName, aDescription);
+        this.roleRepository.add(role);
+        return role;
+    }
+
+    public List<Role> listRoles() {
+        return this.roleRepository.findAll();
+    }
+
+    @IamTx
+    public void changeResponsibilityOfActor(String aUsername, String aResponsibility) {
+        Responsibility responsibility = this.nonNullResponsibility(aResponsibility);
+        this.nonNulUser(aUsername).changeResponsibility(responsibility);
+    }
+
+    private void assertSocietyNotProvisioned() {
+        long count = this.societyRepository.count();
+        if (count > 0) {
+            throw new IllegalStateException("Société dejà provisionné.");
+        }
+    }
 }

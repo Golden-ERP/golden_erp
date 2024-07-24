@@ -17,4 +17,6 @@ public interface CourrierRepository {
     List<Courrier> ofSite(String aSiteId);
 
     void delete(Courrier courrier);
+
+    List<Courrier> courriersOfShareHolder(String anUsername);
 }

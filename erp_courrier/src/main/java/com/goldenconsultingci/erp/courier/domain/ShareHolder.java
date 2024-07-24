@@ -25,7 +25,7 @@ public class ShareHolder extends AssertionConcern implements Serializable {
         this.setRole(aRoleName);
         this.setName(aName);
         this.setSiteId(aSiteId);
-
+//        this.setTask(aTask);
     }
 
     private void setIdentity(String anIdentity) {
@@ -63,6 +63,7 @@ public class ShareHolder extends AssertionConcern implements Serializable {
     public String siteId() {
         return siteId;
     }
+
 
     @Override
     public int hashCode() {

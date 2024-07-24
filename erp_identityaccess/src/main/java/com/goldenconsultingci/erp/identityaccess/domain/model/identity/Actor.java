@@ -10,8 +10,8 @@ public class Actor extends ConcurrencySafeEntity {
     private User user;
     private Gender gender;
     private Direction direction;
-    private String occupation;
     private Site site;
+    private Responsibility responsibility;
 
     protected Actor() {
         super();
@@ -21,16 +21,16 @@ public class Actor extends ConcurrencySafeEntity {
             FullName aName,
             Gender aGender,
             ContactInformation aContactInformation,
-            String anOccupation) {
+            Responsibility aResponsibility) {
         this();
         this.setName(aName);
         this.setGender(aGender);
-        this.setOccupation(anOccupation);
+        this.setResponsibility(aResponsibility);
         this.setContactInformation(aContactInformation);
     }
 
     private void setSite(Site aSite) {
-        this.assertArgumentNotNull(aSite, "Le sitedoit être founi.");
+        this.assertArgumentNotNull(aSite, "Le site doit être fourni.");
         this.site = aSite;
     }
     private void setDirection(Direction aDirection) {
@@ -38,9 +38,9 @@ public class Actor extends ConcurrencySafeEntity {
         this.direction = aDirection;
     }
 
-    private void setOccupation(String anOccupation) {
-        this.assertArgumentNotEmpty(anOccupation, "La fonction est réquise.");
-        this.occupation =  anOccupation;
+    private void setResponsibility(Responsibility aResponsibility) {
+        this.assertArgumentNotNull(aResponsibility, "La fonction est réquise.");
+        this.responsibility =  aResponsibility;
     }
 
     private void setGender(Gender aGender) {
@@ -84,15 +84,16 @@ public class Actor extends ConcurrencySafeEntity {
         return direction;
     }
 
-    public String occupation() {
-        return occupation;
+    public Responsibility responsibility() {
+        return responsibility;
     }
 
     public void changeDirection(Direction aDirection) {
         this.setDirection(aDirection);
     }
-    public void changeOccupation(String anOccupation) {
-        this.setOccupation(anOccupation);
+
+    public void changeResponsibility(Responsibility aResponsibility) {
+        this.setResponsibility(aResponsibility);
     }
 
     public void internalOnlySetUser(User anUser) {
@@ -101,5 +102,9 @@ public class Actor extends ConcurrencySafeEntity {
 
     public void changeSite(Site aSite) {
         this.setSite(aSite);
+    }
+
+    public User user() {
+        return user;
     }
 }

@@ -17,8 +17,8 @@
 
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
-
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+    <context:property-placeholder location="classpath:/WEB-INF/classes/golden/extension/golden_erp-global.properties"/>
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean" primary="true">
         <property name="dataSource" ref="datasource"/>
         <property name="configLocation">
             <value>classpath:hibernate.cfg.xml</value>
@@ -54,4 +54,5 @@
         <constructor-arg ref="jWTManager"/>
     </bean>
     <bean id="settingRepository" class="com.goldenconsultingci.erp.identityaccess.infrastructure.persistence.HibernateSettingRepository" autowire="byName"/>
+    <bean id="hibernateResponsibilityRepository" class="com.goldenconsultingci.erp.identityaccess.infrastructure.persistence.HibernateResponsibilityRepository" autowire="byName"/>
 </beans>

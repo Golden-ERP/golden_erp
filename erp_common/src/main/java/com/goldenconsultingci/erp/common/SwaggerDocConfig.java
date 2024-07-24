@@ -33,7 +33,7 @@ public class SwaggerDocConfig {
                 .title("GOLDEN ERP")
                 .version("1.0.0")
                 .contact(contact())
-                .description("This API exposes endpoints to manage erp");
+                .description("This API exposes endpoints to manage ERP");
     }
 
     private Contact contact() {

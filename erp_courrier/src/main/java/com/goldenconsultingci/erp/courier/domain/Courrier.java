@@ -154,7 +154,7 @@ public class Courrier extends Entity {
     }
 
     public void imputeTo(
-            Set<ShareHolder>  aSHareHolders,
+            ShareHolder  aSHareHolders,
             String instructionsList,
             String aRemark) {
 //        this.assertArgumentNotNull(shareHolder, "Le porteur d'action ne doit pas être null.");
@@ -191,16 +191,24 @@ public class Courrier extends Entity {
     }
 
     public void acknowledge(String anIdentity) {
-        Optional<ShareHolder> shareHolder = this.tasks().stream()
-                .flatMap(task -> task.shareHolders().stream())
-                .filter(s -> s.identity().equals(anIdentity))
-                .findFirst();
-
-        if (shareHolder.isPresent()) {
-            ShareHolder s = shareHolder.get();
-            this.acknowledgments()
-                    .add(new Acknowledgment(s.name()));
+        for (Task task:this.tasks()) {
+            ShareHolder s = task.shareHolder();
+            if (s.identity().equals(anIdentity)) {
+                this.acknowledgments()
+                        .add(
+                                new Acknowledgment(s.role()));
+            }
         }
+//        Optional<ShareHolder> shareHolder = this.tasks().stream()
+//                .flatMap(task -> task.shareHolders().stream())
+//                .filter(s -> s.identity().equals(anIdentity))
+//                .findFirst();
+//
+//        if (shareHolder.isPresent()) {
+//            ShareHolder s = shareHolder.get();
+//            this.acknowledgments()
+//                    .add(new Acknowledgment(s.name()));
+//        }
     }
 
     public boolean isSubmitted() {

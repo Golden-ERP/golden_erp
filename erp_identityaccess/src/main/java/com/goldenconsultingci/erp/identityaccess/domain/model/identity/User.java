@@ -4,6 +4,9 @@ import com.goldenconsultingci.erp.common.domain.ConcurrencySafeEntity;
 import com.goldenconsultingci.erp.identityaccess.domain.DomainRegistry;
 import com.goldenconsultingci.erp.identityaccess.domain.model.access.Role;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -13,7 +16,7 @@ public class User extends ConcurrencySafeEntity {
     private String password;
     private Actor actor;
     private boolean active;
-    private Role role;
+    private Set<Role> roles;
     protected User() {
         super();
     }
@@ -135,12 +138,25 @@ public class User extends ConcurrencySafeEntity {
                 this.actor().site().siteId());
     }
 
+    private void setRoles(Set<Role> aRoles) {
+        this.roles =  aRoles;
+    }
+
+    public Set<Role> allRoles() {
+        this.roles().addAll(actor().responsibility().roles());
+        return Collections.unmodifiableSet(this.roles());
+    }
+
+    private Set<Role> roles() {
+        return roles;
+    }
+
     public boolean hasRole(Role role) {;
         return true;
     }
 
     public void assignToRole(Role role) {
-        this.role = role;
+        this.roles().add(role);
     }
 
     public Site site() {
@@ -152,5 +168,9 @@ public class User extends ConcurrencySafeEntity {
             return this.site().siteId().equals(aSiteId);
         }
         return false;
+    }
+
+    public void changeResponsibility(Responsibility responsibility) {
+        this.actor().changeResponsibility(responsibility);
     }
 }

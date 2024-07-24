@@ -11,5 +11,9 @@
         <one-to-one name="actor" class="com.goldenconsultingci.erp.identityaccess.domain.model.identity.Actor" cascade="all" lazy="false" />
         <property name="username" column="username" type="java.lang.String" />
         <property name="active" column="active" type="boolean"/>
+        <set name="roles">
+            <key column="user_id"/>
+            <many-to-many class="com.goldenconsultingci.erp.identityaccess.domain.model.access.Role"/>
+        </set>
     </class>
 </hibernate-mapping>

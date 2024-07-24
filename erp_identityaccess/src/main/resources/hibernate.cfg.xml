@@ -4,11 +4,11 @@
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
-        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="hibernate.connection.password">U2kgRElFVSBlc3QgcG91ciBub3VzIH@!!</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/erp_iam</property>
-        <property name="hibernate.connection.username">root</property>
-        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.connection.driver_class">${db.driver}</property>
+        <property name="hibernate.connection.url">${db.url}</property>
+        <property name="hibernate.connection.password">${db.password}</property>
+        <property name="hibernate.connection.username">${db.user}</property>
+        <property name="hibernate.dialect">${db.dialect}</property>
         <!-- C3P0 settings -->
         <property name="hibernate.c3p0.min_size">3</property>
         <property name="hibernate.c3p0.max_size">20</property>
@@ -32,5 +32,6 @@
         <mapping resource="Role.hbm.xml"/>
         <mapping resource="Site.hbm.xml"/>
         <mapping resource="Setting.hbm.xml"/>
+        <mapping resource="Responsibility.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

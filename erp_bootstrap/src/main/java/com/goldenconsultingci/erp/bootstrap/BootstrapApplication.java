@@ -8,11 +8,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
-@SpringBootApplication
-//@Import({com.goldenconsultingci.erp.common.spring.security.SecurityConfig.class})
+@SpringBootApplication(exclude = HibernateJpaAutoConfiguration.class)
 @ComponentScan(basePackages = {"com.goldenconsultingci.erp"})
 @ImportResource({"classpath:applicationContext.xml"})
-@EnableAutoConfiguration(exclude = HibernateJpaAutoConfiguration.class)
 public class BootstrapApplication {
     public static void main( String[] args ) {
         SpringApplication.run(BootstrapApplication.class, args);

@@ -2,11 +2,11 @@ package com.goldenconsultingci.erp.identityaccess.domain.model.identity;
 
 import com.goldenconsultingci.erp.common.AssertionConcern;
 import com.goldenconsultingci.erp.common.spring.security.JWTManager;
+import com.goldenconsultingci.erp.identityaccess.domain.model.access.Role;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class AuthenticationService extends AssertionConcern {
 
@@ -33,13 +33,19 @@ public class AuthenticationService extends AssertionConcern {
         if (user != null) {
             if (this.passwordEncoder.matches(aPassword, user.password())) {
                 if (user.isActive() && user.site() != null) {
+                    List<String> roles = user.allRoles().stream()
+                            .map(Role::getName)
+                            .collect(Collectors.toList());
                     //UserDescriptor descriptor = user.descriptor();
 //                    Map<String, Object> claims = new HashMap<>();
 //                    claims.put("username", user.username());
 //                    claims.put("siteName", user.site().name());
 //                    claims.put("siteId", user.site().siteId());
 //                    claims.put("roles", Arrays.asList("Assitante"));
-                    token = jwtManager.create(user.username(), "", user.site().name(), user.site().siteId());
+                    token = jwtManager.create(
+                            user.username(),
+                            roles, user.actor().responsibility().name(),
+                            user.site().siteId());
 //                    token = jwtManager.create(claims);
                 }
             }

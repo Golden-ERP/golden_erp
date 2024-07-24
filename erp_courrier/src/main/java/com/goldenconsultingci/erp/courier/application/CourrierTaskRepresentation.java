@@ -13,7 +13,7 @@ public class CourrierTaskRepresentation {
     private String courrierId;
     private String instruction;
     private String remark;
-    private Set<ShareHolderRepresentation> shareHolders;
+    private ShareHolderRepresentation shareHolder;
 
     public CourrierTaskRepresentation(Task aTask) {
         this.initialize(aTask);
@@ -24,10 +24,7 @@ public class CourrierTaskRepresentation {
         this.courrierId = aTask.courrierId().id();
         this.instruction = aTask.instruction();
         this.remark = aTask.remark();
-        this.shareHolders = aTask.shareHolders()
-                .stream()
-                .map(ShareHolderRepresentation::new)
-                .collect(Collectors.toSet());
+        this.shareHolder = new ShareHolderRepresentation(aTask.shareHolder());
     }
 
     public String getTaskId() {
@@ -46,8 +43,8 @@ public class CourrierTaskRepresentation {
         return remark;
     }
 
-    public Set<ShareHolderRepresentation> getShareHolders() {
-        return shareHolders;
+    public ShareHolderRepresentation getShareHolders() {
+        return shareHolder;
     }
 
     public static class ShareHolderRepresentation {

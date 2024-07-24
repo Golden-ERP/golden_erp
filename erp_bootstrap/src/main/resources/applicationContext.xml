@@ -6,23 +6,23 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:tx="http://www.springframework.org/schema/tx"
         xsi:schemaLocation="
-        http://www.springframework.org/schema/beans
-		https://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context
-		https://www.springframework.org/schema/context/spring-context.xsd
-		http://www.springframework.org/schema/tx
-		https://www.springframework.org/schema/tx/spring-tx.xsd
-		http://www.springframework.org/schema/aop
-		https://www.springframework.org/schema/aop/spring-aop.xsd">
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <aop:aspectj-autoproxy/>
 
     <context:annotation-config />
-
-    <tx:annotation-driven transaction-manager="transactionManager"/>
     <context:component-scan base-package="com.goldenconsultingci.erp"/>
     <import resource="classpath:applicationContext-common.xml"/>
     <import resource="classpath:applicationContext-identityaccess.xml"/>
     <import resource="classpath:applicationContext-identityaccess-application.xml"/>
     <import resource="classpath:applicationContext-courrier.xml"/>
+<!--    <bean id="localEntityResolver" class="com.goldenconsultingci.erp.bootstrap.LocalEntityResolver"/>-->
+<!--    <bean class="org.springframework.beans.factory.xml.XmlBeanDefinitionReader">-->
+<!--        <property name="entityResolver" ref="localEntityResolver"/>-->
+<!--    </bean>-->
+<!--    <bean class="com.goldenconsultingci.erp.bootstrap.CustomEntityResolverConfig" factory-method="entityResolverConfigurer"/>-->
+
 </beans>

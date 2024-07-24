@@ -8,10 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class JWTManager {
@@ -22,14 +19,14 @@ public class JWTManager {
     @Autowired
     private RSAPublicKey publicKey;
 
-    public String create(String anUsername, String role, String siteName, String siteId) {
+    public String create(String anUsername, List<String> roles, String resonsibility, String siteId) {
         final long now = System.currentTimeMillis();
         String token = JWT.create()
                 .withAudience(anUsername)
                 .withClaim("username", anUsername)
                 .withClaim("siteId", siteId)
-                .withClaim("site", siteName)
-                .withClaim("role", Arrays.asList("Assistante"))
+                .withClaim("responsibility", resonsibility)
+                .withClaim("roles", roles)
                 .withIssuedAt(new Date(now))
                 .withExpiresAt(new Date(now + TOKEN_EXPIRE_TIME))
                 .sign(Algorithm.RSA256(publicKey, privateKey));
